@@ -13,8 +13,6 @@
  a - high bit
  h - low bit
 
-  Written for SEM Industries.
-  All text above must be included in any redistribution.
 **********************************************************************/
 #ifndef DISPLAY_H
 #define DISPLAY_H
@@ -34,9 +32,10 @@ enum Digits {
   _9 = 0b11110111,
 };
 
+// TODO: Upper/Lower case
 enum Letters {
   _A = 0b11101111,
-  _B = 0b11111111,
+  _B = 0b00111111,
   _C = 0b10011101,
   _D = 0b01111011,
   _E = 0b10011111,
@@ -44,13 +43,16 @@ enum Letters {
   _G = 0b10111101,
   _H = 0b01101111,
   _I = 0b00001101,
+  _j = 0b10110001,
+  _J = 0b01111001,
   _K = 0b10101111,
   _L = 0b00011101,
   _M = 0b10101011,
   _N = 0b11101101,
   _O = 0b11111101,
   _P = 0b11001111,
-  _R = 0b11101111,
+  _Q = 0b11100111,
+  _R = 0b00001011,
   _S = 0b10110111,
   _T = 0b00011111,
   _U = 0b01111101,
@@ -65,7 +67,7 @@ enum Letters {
 enum Cyrillic {
   _cA = Letters::_A,
   _cB = Digits::_6,
-  _cV = Letters::_B,
+  _cV = 0b11111111,
   _cG = 0b10001101,
   _cD = Letters::_D,
   _cYe = Letters::_E,
@@ -85,7 +87,7 @@ enum Cyrillic {
   _cTs = Letters::_U,
   _cCh = Digits::_4,
   _cE = Digits::_3,
-  _cYa = Letters::_R,
+  _cYa = 0b11101111,
 
   _c0 = 0b11111111,
   _cY = Letters::_Y,
