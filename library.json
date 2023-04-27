@@ -1,0 +1,34 @@
+{
+    "name": "LT-3XS664(595)",
+    "version": "0.0.1",
+    "description": "This is a library for the LT-3XS664(595) display, which has three rows with six, six, and four slots, respectively.",
+    "keywords": "Display, lcd, LT-3XS664(595), UI",
+    "authors": [
+        {
+            "name": "Dugar Badagarov",
+            "email": "hustonashford@gmail.com"
+        },
+        {
+            "name": "Andrey Motorov",
+            "email": "andrey.motorov.m@gmail.com"
+        },
+        {
+            "name": "Galsandorj Chimedbalidar",
+            "email": "gaaya319@gmail.com"
+        },
+        {
+            "name": "Adyasuren Jargalsaikhan",
+            "email": "adiya21j@gmail.com"
+        },
+        {
+            "name": "Tulga Galbadrakh",
+            "email": "tulga.g.si@gmail.com"
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/foo/bar.git"
+    },
+    "frameworks": "arduino",
+    "platforms": "*"
+}
