@@ -1,5 +1,6 @@
 #include <Display.h>
 
+
 Display::Display(uint8_t _enable, uint8_t _clock, uint8_t _data) {
   enable_pin = _enable;
   clock_pin = _clock;
@@ -50,6 +51,7 @@ Display::Display(uint8_t _enable, uint8_t _clock, uint8_t _data) {
   wipeState();
 }
 
+
 void Display::setup() {
   pinMode(enable_pin, OUTPUT);
   pinMode(clock_pin, OUTPUT);
@@ -96,6 +98,7 @@ void Display::cls() {
   printCurrentState();
 }
 
+
 void Display::wipeState() {
   str1[0] = str2[0] = str3[0] = '\0';
   for (size_t i = 0; i < FIRST_ROW_SLOTS; ++i) row1[i] = Letters::_Space;
@@ -103,11 +106,13 @@ void Display::wipeState() {
   for (size_t i = 0; i < THIRD_ROW_SLOTS; ++i) row3[i] = Letters::_Space;
 }
 
+
 void Display::printCurrentState() {
   for (int i = THIRD_ROW_SLOTS - 1; i >= 0; --i) print(row3[i]);
   for (int i = SECOND_ROW_SLOTS - 1; i >= 0; --i) print(row2[i]);
   for (int i = FIRST_ROW_SLOTS - 1; i >= 0; --i) print(row1[i]);
 }
+
 
 void Display::wipeSate(uint8_t i) {
   if (i == 0) str1[0] = '\0';
@@ -118,6 +123,7 @@ void Display::wipeSate(uint8_t i) {
   if (i == 1) for (size_t i = 0; i < SECOND_ROW_SLOTS; ++i) row2[i] = Letters::_Space;
   if (i == 2) for (size_t i = 0; i < THIRD_ROW_SLOTS; ++i) row3[i] = Letters::_Space;
 }
+
 
 size_t Display::translate(const char* str, uint8_t* buf, size_t bufSize) {
   size_t it = 0;
@@ -141,6 +147,7 @@ size_t Display::translate(const char* str, uint8_t* buf, size_t bufSize) {
   return strLen;
 }
 
+
 void Display::print(const char* firstRow, const char* secondRow, const char* thirdRow) {
   wipeState();
   size_t res1 = translate(firstRow, this->row1, FIRST_ROW_SLOTS);
@@ -154,31 +161,33 @@ void Display::print(const char* firstRow, const char* secondRow, const char* thi
   printCurrentState();
 }
 
+
 void Display::printFirstRow(const char* str) {
   size_t res = translate(str, this->row1, FIRST_ROW_SLOTS);
   memcpy(str1, str, res); str1[res] = '\0';
-  showCurrentStrs();
   printCurrentState();
 }
+
 
 void Display::printSecondRow(const char* str) {
   size_t res = translate(str, this->row2, SECOND_ROW_SLOTS);
   memcpy(str2, str, res); str2[res] = '\0';
-  showCurrentStrs();
   printCurrentState();
 }
+
 
 void Display::printThirdRow(const char* str) {
   size_t res = translate(str, this->row3, THIRD_ROW_SLOTS);
   memcpy(str3, str, res); str3[res] = '\0';
-  showCurrentStrs();
   printCurrentState();
 }
+
 
 void Display::clearRow(uint8_t i) {
   wipeSate(i);
   printCurrentState();
 }
+
 
 void Display::getStrState(char* r1, char* r2, char* r3) {
   for (int i = 0; i < FIRST_STR_LEN; ++i) r1[i] = str1[i];
@@ -186,15 +195,18 @@ void Display::getStrState(char* r1, char* r2, char* r3) {
   for (int i = 0; i < THIRD_STR_LEN; ++i) r3[i] = str3[i];
 }
 
+
 void Display::getStrState1(char* r) {
   for (int i = 0; i < FIRST_STR_LEN; ++i) r[i] = str1[i];
   r[FIRST_STR_LEN] = '\0';
 }
 
+
 void Display::getStrState2(char* r) {
   for (int i = 0; i < SECOND_STR_LEN; ++i) r[i] = str2[i];
   r[SECOND_STR_LEN] = '\0';
 }
+
 
 void Display::getStrState3(char* r) {
   for (int i = 0; i < THIRD_STR_LEN; ++i) r[i] = str3[i];
