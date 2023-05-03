@@ -47,8 +47,6 @@ Display::Display(uint8_t _enable, uint8_t _clock, uint8_t _data) {
   charValue[' '] = (uint8_t)Letters::_Space;
 
   charValue['-'] = (uint8_t)Special::_Minus;
-
-  wipeState();
 }
 
 
@@ -57,7 +55,7 @@ void Display::setup() {
   pinMode(clock_pin, OUTPUT);
   pinMode(data_pin, OUTPUT);
 
-  clearLCD();
+  cls();
 }
 
 /* Clock signal generator */
