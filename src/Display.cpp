@@ -1,4 +1,4 @@
-#include <Display.h>
+#include "Display.h"
 
 
 Display::Display(uint8_t _enable, uint8_t _clock, uint8_t _data) {
@@ -19,31 +19,31 @@ Display::Display(uint8_t _enable, uint8_t _clock, uint8_t _data) {
   charValue['8'] = (uint8_t)Digits::_8;
   charValue['9'] = (uint8_t)Digits::_9;
 
-  charValue['A'] = (uint8_t)Letters::_A;
-  charValue['B'] = (uint8_t)Letters::_B;
-  charValue['C'] = (uint8_t)Letters::_C;
-  charValue['D'] = (uint8_t)Letters::_D;
-  charValue['E'] = (uint8_t)Letters::_E;
-  charValue['F'] = (uint8_t)Letters::_F;
-  charValue['G'] = (uint8_t)Letters::_G;
-  charValue['H'] = (uint8_t)Letters::_H;
-  charValue['I'] = (uint8_t)Letters::_I;
-  charValue['J'] = (uint8_t)Letters::_J;
-  charValue['K'] = (uint8_t)Letters::_K;
-  charValue['L'] = (uint8_t)Letters::_L;
-  charValue['M'] = (uint8_t)Letters::_M;
-  charValue['N'] = (uint8_t)Letters::_N;
-  charValue['O'] = (uint8_t)Letters::_O;
-  charValue['P'] = (uint8_t)Letters::_P;
-  charValue['R'] = (uint8_t)Letters::_R;
-  charValue['S'] = (uint8_t)Letters::_S;
-  charValue['T'] = (uint8_t)Letters::_T;
-  charValue['U'] = (uint8_t)Letters::_U;
-  charValue['V'] = (uint8_t)Letters::_V;
-  charValue['W'] = (uint8_t)Letters::_W;
-  charValue['X'] = (uint8_t)Letters::_X;
-  charValue['Y'] = (uint8_t)Letters::_Y;
-  charValue['Z'] = (uint8_t)Letters::_Z;
+  charValue['A'] = (uint8_t)Letters::Letter_A;
+  charValue['B'] = (uint8_t)Letters::Letter_B;
+  charValue['C'] = (uint8_t)Letters::Letter_C;
+  charValue['D'] = (uint8_t)Letters::Letter_D;
+  charValue['E'] = (uint8_t)Letters::Letter_E;
+  charValue['F'] = (uint8_t)Letters::Letter_F;
+  charValue['G'] = (uint8_t)Letters::Letter_G;
+  charValue['H'] = (uint8_t)Letters::Letter_H;
+  charValue['I'] = (uint8_t)Letters::Letter_I;
+  charValue['J'] = (uint8_t)Letters::Letter_J;
+  charValue['K'] = (uint8_t)Letters::Letter_K;
+  charValue['L'] = (uint8_t)Letters::Letter_L;
+  charValue['M'] = (uint8_t)Letters::Letter_M;
+  charValue['N'] = (uint8_t)Letters::Letter_N;
+  charValue['O'] = (uint8_t)Letters::Letter_O;
+  charValue['P'] = (uint8_t)Letters::Letter_P;
+  charValue['R'] = (uint8_t)Letters::Letter_R;
+  charValue['S'] = (uint8_t)Letters::Letter_S;
+  charValue['T'] = (uint8_t)Letters::Letter_T;
+  charValue['U'] = (uint8_t)Letters::Letter_U;
+  charValue['V'] = (uint8_t)Letters::Letter_V;
+  charValue['W'] = (uint8_t)Letters::Letter_W;
+  charValue['X'] = (uint8_t)Letters::Letter_X;
+  charValue['Y'] = (uint8_t)Letters::Letter_Y;
+  charValue['Z'] = (uint8_t)Letters::Letter_Z;
   charValue[' '] = (uint8_t)Letters::_Space;
 
   charValue['-'] = (uint8_t)Special::_Minus;
@@ -148,35 +148,37 @@ size_t Display::translate(const char* str, uint8_t* buf, size_t bufSize) {
 
 void Display::print(const char* firstRow, const char* secondRow, const char* thirdRow) {
   wipeState();
+  char rowFirst[12];
+
   size_t res1 = translate(firstRow, this->row1, FIRST_ROW_SLOTS);
   size_t res2 = translate(secondRow, this->row2, SECOND_ROW_SLOTS);
   size_t res3 = translate(thirdRow, this->row3, THIRD_ROW_SLOTS);
 
-  memcpy(str1, firstRow, res1); str1[res1] = '\0';
-  memcpy(str2, firstRow, res2); str2[res2] = '\0';
-  memcpy(str3, firstRow, res3); str3[res3] = '\0';
+  memcpy(str1, firstRow, sizeof(char) * res1); str1[res1] = '\0';
+  memcpy(str2, secondRow, sizeof(char) * res2); str2[res2] = '\0';
+  memcpy(str3, thirdRow, sizeof(char) * res3); str3[res3] = '\0';
 
   printCurrentState();
 }
 
 
-void Display::printFirstRow(const char* str) {
+void Display::printRow1(const char* str) {
   size_t res = translate(str, this->row1, FIRST_ROW_SLOTS);
-  memcpy(str1, str, res); str1[res] = '\0';
+  memcpy(str1, str, sizeof(char) * res); str1[res] = '\0';
   printCurrentState();
 }
 
 
-void Display::printSecondRow(const char* str) {
+void Display::printRow2(const char* str) {
   size_t res = translate(str, this->row2, SECOND_ROW_SLOTS);
-  memcpy(str2, str, res); str2[res] = '\0';
+  memcpy(str2, str, sizeof(char) * res); str2[res] = '\0';
   printCurrentState();
 }
 
 
-void Display::printThirdRow(const char* str) {
+void Display::printRow3(const char* str) {
   size_t res = translate(str, this->row3, THIRD_ROW_SLOTS);
-  memcpy(str3, str, res); str3[res] = '\0';
+  memcpy(str3, str, sizeof(char) * res); str3[res] = '\0';
   printCurrentState();
 }
 
