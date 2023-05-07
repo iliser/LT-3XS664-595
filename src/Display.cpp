@@ -6,6 +6,7 @@ Display::Display(uint8_t _enable, uint8_t _clock, uint8_t _data) {
   clock_pin = _clock;
   data_pin = _data;
 
+  // # Почему таблица не статичная??
   for (int i = 0; i < 128; ++i)
     charValue[i] = 0;
   charValue['0'] = (uint8_t)Digits::_0;
@@ -79,7 +80,19 @@ void Display::init() {
   digitalWrite(data_pin, LOW);
 }
 
-
+// # перегруженная функция которая в разных перегрузках работает с разными слоями логики
+// этот принт работает непосредственно с электроникой и сигналами
+// другой принт подготавливает данные и печатает их
+// 
+// так же есть проблема с частым вызовом printCurrentState который вызывается после каждого обновления
+// а если я хочу обновить 2 строки из 3х
+//    -> 2 принта
+//    -> либо получения одной из строк и вызов print(a,old_b,c)
+//
+// как вариант разбить обновления дисплея и отрисовку
+//    Dispalay& updateRow(int id,const char * str) // ссылка позволит чэйнить вызовы
+//    void (flush/display/print)() // отправить текущее состояние на дисплей
+//    так же таким дизайном можно уменьшить количество вызовов translate отлаживая вызов до момента flush
 void Display::print(uint8_t charCode) {
   init();
   for (int i = 0; i < 8; ++i) {
@@ -111,12 +124,18 @@ void Display::printCurrentState() {
   for (int i = FIRST_ROW_SLOTS - 1; i >= 0; --i) print(row1[i]);
 }
 
-
+// # очепятка
 void Display::wipeSate(uint8_t i) {
+  // # дублирование кода из за решения хранить row раздельно
+  // можно было остановиться на коде вида
+  // uint8_t* rows[3] = [row1,row2,row3]
+  // size_t row_slots = [FIRST_ROW_SLOTS,SECOND_ROW_SLOTS,THIRD_ROW_SLOTS]
+  // индерекция не так сильно влияет на производительность как другие косяки в коде этого проекта
   if (i == 0) str1[0] = '\0';
   if (i == 1) str2[0] = '\0';
   if (i == 2) str3[0] = '\0';
 
+  // # memset u know??
   if (i == 0) for (size_t i = 0; i < FIRST_ROW_SLOTS; ++i) row1[i] = Letters::_Space;
   if (i == 1) for (size_t i = 0; i < SECOND_ROW_SLOTS; ++i) row2[i] = Letters::_Space;
   if (i == 2) for (size_t i = 0; i < THIRD_ROW_SLOTS; ++i) row3[i] = Letters::_Space;
@@ -126,6 +145,14 @@ void Display::wipeSate(uint8_t i) {
 size_t Display::translate(const char* str, uint8_t* buf, size_t bufSize) {
   size_t it = 0;
   size_t strLen = 0;
+
+  // # можно итерироваться по указателям 
+  // по строке for(char * c = str;*c != '\0'; ++c)
+  // и по buf, код станет немного проще читать
+
+  // ## strlen внутри for, это сильно верить в компилятор
+  // в худшем случае получшишь O(N*N)
+  // в лучшем O(2 * N) вместо O(N)
   for (size_t i = 0; i < strlen(str); ++i) {
     if (str[i] == '.' || str[i] == ',') {
       if (it) {
@@ -162,6 +189,7 @@ void Display::print(const char* firstRow, const char* secondRow, const char* thi
 }
 
 
+// # неконсистенто отнистельно wipeState(int id)
 void Display::printRow1(const char* str) {
   size_t res = translate(str, this->row1, FIRST_ROW_SLOTS);
   memcpy(str1, str, sizeof(char) * res); str1[res] = '\0';
@@ -189,6 +217,7 @@ void Display::clearRow(uint8_t i) {
 }
 
 
+// # можно заменить на геттер `const char * getStr1()` т.к. не каждому нужна копия данных для изменения
 void Display::getStrState(char* r1, char* r2, char* r3) {
   for (int i = 0; i < FIRST_STR_LEN; ++i) r1[i] = str1[i];
   for (int i = 0; i < SECOND_STR_LEN; ++i) r2[i] = str2[i];
