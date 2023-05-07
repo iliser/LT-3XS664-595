@@ -175,6 +175,7 @@ size_t Display::translate(const char* str, uint8_t* buf, size_t bufSize) {
 
 void Display::print(const char* firstRow, const char* secondRow, const char* thirdRow) {
   wipeState();
+  // # yep unused variable
   char rowFirst[12];
 
   size_t res1 = translate(firstRow, this->row1, FIRST_ROW_SLOTS);
